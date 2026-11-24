@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Plus, Trash2, X, Loader2 } from "lucide-react";
 import type { CompanySettings, Project, ProjectEvent } from "@/lib/types";
-import { DEFAULT_CASH_HOLDERS, PROJECT_CATEGORIES, RECEIPT_STAGES } from "@/lib/constants";
+import { PROJECT_CATEGORIES, RECEIPT_STAGES } from "@/lib/constants";
 import { formatINR } from "@/lib/format";
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function ProjectFormModal({ settings, cashHolders, initialProject, onClose, onSaved }: Props) {
-  const holders = Array.from(new Set([...DEFAULT_CASH_HOLDERS, ...cashHolders]));
+  const holders = Array.from(new Set([...cashHolders, "Company Bank / UPI"])).filter(Boolean);
 
   const [category, setCategory] = useState(initialProject?.category || PROJECT_CATEGORIES[0].label);
   const [receiptType, setReceiptType] = useState(initialProject?.receipt_type || "Quotation");
