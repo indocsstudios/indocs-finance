@@ -11,11 +11,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Title, type, and amount are required." }, { status: 400 });
     }
     const txType = body.tx_type === "income" || body.tx_type === "transfer" ? body.tx_type : "expense";
+    if (txType === "transfer" && body.paid_by === body.transfer_to) {
+      return NextResponse.json({ error: "From aur To same person nahi ho sakte." }, { status: 400 });
+    }
     const supabase = getSupabaseAdmin();
     const { data, error } = await supabase
       .from("finance_transactions")
       .insert({
         project_id: body.project_id || null,
+        vendor_booking_id: body.vendor_booking_id || null,
         tx_type: txType,
         category: String(body.category || (txType === "transfer" ? "Team Cash Handover" : "General")).trim(),
         title: String(body.title).trim(),

@@ -51,9 +51,15 @@ export const RECEIPT_STAGES = [
 
 export type ReceiptStage = (typeof RECEIPT_STAGES)[number];
 
-export const DEFAULT_CASH_HOLDERS = [
-  "Mithilesh Shende",
-  "Devansh Rajput",
-  "Anav",
-  "Company Bank / UPI",
+export const VENDOR_ROLES = [
+  "Traditional Cameraman",
+  "Candid Photographer",
+  "Cinematographer / Video",
+  "Drone Operator",
+  "Camera / Lens Rental",
+  "Lighting / Sound Crew",
+  "Video Editor / Colorist",
+  "Studio / Location Booking",
+  "Album / Printing Vendor",
+  "Other Vendor / Crew",
 ];
