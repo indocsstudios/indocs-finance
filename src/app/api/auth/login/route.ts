@@ -9,18 +9,12 @@ export async function POST(req: Request) {
     const password = String(body.password || "");
 
     if (!identifier || !password) {
-      return NextResponse.json(
-        { error: "Please enter your email/username and the company password." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Please enter your email/username and password." }, { status: 400 });
     }
-
-    // 1. Verify shared master password stored strictly in .env
     if (!verifyMasterPassword(password)) {
       return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
     }
 
-    // 2. Lookup team member by email OR username in Supabase
     const supabase = getSupabaseAdmin();
     const field = identifier.includes("@") ? "email" : "username";
     const { data: user, error } = await supabase
@@ -33,26 +27,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: `Supabase Error: ${error.message}` }, { status: 500 });
     }
     if (!user) {
-      return NextResponse.json(
-        { error: "Account not found. Please register first or contact Admin." },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Account not found. Please register first or contact Admin." }, { status: 401 });
     }
-
-    // 3. Enforce Email Verification
     if (!user.email_verified) {
-      return NextResponse.json(
-        { error: "Email not verified yet. Please check your inbox for the verification link." },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Email not verified yet. Please check your inbox." }, { status: 403 });
     }
-
-    // 4. Enforce Admin Approval Gate
     if (!user.is_approved) {
-      return NextResponse.json(
-        { error: "Your account is awaiting Admin approval. You cannot log in until approved." },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Awaiting Admin approval before you can log in." }, { status: 403 });
     }
 
     setSessionCookie({
@@ -63,17 +44,9 @@ export async function POST(req: Request) {
       role: user.role,
     });
 
-    return NextResponse.json({
-      user: {
-        id: user.id,
-        full_name: user.full_name,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-      },
-    });
+    return NextResponse.json({ user });
   } catch (err) {
     console.error("Login error:", err);
-    return NextResponse.json({ error: "Authentication failed. Check server configuration." }, { status: 500 });
+    return NextResponse.json({ error: "Authentication failed." }, { status: 500 });
   }
 }

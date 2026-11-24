@@ -6,17 +6,8 @@ export function getTransporter() {
   const secure = process.env.SMTP_SECURE !== "false";
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-
-  if (!user || !pass) {
-    throw new Error("SMTP_USER and SMTP_PASS must be set in .env to send emails.");
-  }
-
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure,
-    auth: { user, pass },
-  });
+  if (!user || !pass) throw new Error("SMTP_USER and SMTP_PASS must be set in .env.");
+  return nodemailer.createTransport({ host, port, secure, auth: { user, pass } });
 }
 
 export async function sendMail(options: {
@@ -27,9 +18,8 @@ export async function sendMail(options: {
   attachments?: Array<{ filename: string; content: Buffer; contentType?: string }>;
 }) {
   const transporter = getTransporter();
-  const fromName = process.env.SMTP_FROM_NAME || "Indox Media";
+  const fromName = process.env.SMTP_FROM_NAME || "Indocs Media";
   const fromEmail = process.env.SMTP_USER || "indoxmedia@gmail.com";
-
   return transporter.sendMail({
     from: `"${fromName}" <${fromEmail}>`,
     to: options.to,

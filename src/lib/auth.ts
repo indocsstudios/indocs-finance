@@ -14,9 +14,7 @@ function getSecret(): string {
 
 export function verifyMasterPassword(submitted: string): boolean {
   const expected = process.env.APP_MASTER_PASSWORD;
-  if (!expected) {
-    throw new Error("APP_MASTER_PASSWORD is not configured in .env.");
-  }
+  if (!expected) throw new Error("APP_MASTER_PASSWORD is not configured in .env.");
   const a = Buffer.from(submitted, "utf8");
   const b = Buffer.from(expected, "utf8");
   if (a.length !== b.length) return false;
@@ -24,15 +22,9 @@ export function verifyMasterPassword(submitted: string): boolean {
 }
 
 export function createSessionToken(user: SessionUser): string {
-  const payload = {
-    ...user,
-    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
-  };
+  const payload = { ...user, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7 };
   const encoded = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
-  const sig = crypto
-    .createHmac("sha256", getSecret())
-    .update(encoded)
-    .digest("base64url");
+  const sig = crypto.createHmac("sha256", getSecret()).update(encoded).digest("base64url");
   return `${encoded}.${sig}`;
 }
 
@@ -40,19 +32,13 @@ export function verifySessionToken(token: string | undefined): SessionUser | nul
   if (!token || !token.includes(".")) return null;
   try {
     const [encoded, sig] = token.split(".");
-    const expectedSig = crypto
-      .createHmac("sha256", getSecret())
-      .update(encoded)
-      .digest("base64url");
-
+    const expectedSig = crypto.createHmac("sha256", getSecret()).update(encoded).digest("base64url");
     const sigBuf = Buffer.from(sig, "utf8");
     const expectedBuf = Buffer.from(expectedSig, "utf8");
     if (sigBuf.length !== expectedBuf.length) return null;
     if (!crypto.timingSafeEqual(sigBuf, expectedBuf)) return null;
-
     const payload = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));
     if (!payload.exp || payload.exp < Math.floor(Date.now() / 1000)) return null;
-
     return {
       id: payload.id,
       full_name: payload.full_name,
@@ -66,8 +52,7 @@ export function verifySessionToken(token: string | undefined): SessionUser | nul
 }
 
 export function getSession(): SessionUser | null {
-  const cookieStore = cookies();
-  const token = cookieStore.get(COOKIE_NAME)?.value;
+  const token = cookies().get(COOKIE_NAME)?.value;
   return verifySessionToken(token);
 }
 

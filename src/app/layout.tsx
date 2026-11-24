@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Indox Media — Client & Receipt Admin Portal",
-  description: "Financial records, multi-event bookings, and downloadable PDF receipts for Indox Media.",
+  title: "Indocs Media — Projects, Receipts & Finance Portal",
+  description: "Client receipts, multi-event shoots, and internal profit/expense ledger for Indocs Media.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

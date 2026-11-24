@@ -11,9 +11,6 @@ export function getSupabaseAdmin() {
   }
 
   return createClient(url, serviceKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
+    auth: { autoRefreshToken: false, persistSession: false },
   });
 }
