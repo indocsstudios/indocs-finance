@@ -49,6 +49,7 @@ export interface Project {
   id: string;
   receipt_number: string;
   receipt_type: string | null;
+  category: string | null;
   client_name: string;
   client_email: string | null;
   client_phone: string | null;
@@ -60,8 +61,10 @@ export interface Project {
   advance_amount: number;
   advance_confirmed: boolean;
   advance_received_date: string | null;
+  advance_received_by: string | null;
   final_payment_amount: number | null;
   final_payment_date: string | null;
+  final_payment_received_by: string | null;
   booking_confirmed_date: string | null;
   settlement_date: string | null;
   payment_mode: string | null;
@@ -77,12 +80,13 @@ export interface Project {
 export interface FinanceTransaction {
   id: string;
   project_id: string | null;
-  tx_type: "expense" | "income";
+  tx_type: "expense" | "income" | "transfer";
   category: string;
   title: string;
   amount: number;
   tx_date: string;
   paid_by: string | null;
+  transfer_to: string | null;
   payment_mode: string | null;
   notes: string | null;
   proof_image_url: string | null;

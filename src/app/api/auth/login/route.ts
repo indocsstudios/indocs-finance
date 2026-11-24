@@ -7,13 +7,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const identifier = String(body.identifier || "").trim().toLowerCase();
     const password = String(body.password || "");
-
-    if (!identifier || !password) {
-      return NextResponse.json({ error: "Please enter your email/username and password." }, { status: 400 });
-    }
-    if (!verifyMasterPassword(password)) {
-      return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
-    }
+    if (!identifier || !password) return NextResponse.json({ error: "Enter email/username and password." }, { status: 400 });
+    if (!verifyMasterPassword(password)) return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
 
     const supabase = getSupabaseAdmin();
     const field = identifier.includes("@") ? "email" : "username";
@@ -23,30 +18,15 @@ export async function POST(req: Request) {
       .eq(field, identifier)
       .maybeSingle();
 
-    if (error) {
-      return NextResponse.json({ error: `Supabase Error: ${error.message}` }, { status: 500 });
-    }
-    if (!user) {
-      return NextResponse.json({ error: "Account not found. Please register first or contact Admin." }, { status: 401 });
-    }
-    if (!user.email_verified) {
-      return NextResponse.json({ error: "Email not verified yet. Please check your inbox." }, { status: 403 });
-    }
-    if (!user.is_approved) {
-      return NextResponse.json({ error: "Awaiting Admin approval before you can log in." }, { status: 403 });
-    }
+    if (error) return NextResponse.json({ error: `Supabase Error: ${error.message}` }, { status: 500 });
+    if (!user) return NextResponse.json({ error: "Account not found. Register first or contact Admin." }, { status: 401 });
+    if (!user.email_verified) return NextResponse.json({ error: "Email not verified yet." }, { status: 403 });
+    if (!user.is_approved) return NextResponse.json({ error: "Awaiting Admin approval." }, { status: 403 });
 
-    setSessionCookie({
-      id: user.id,
-      full_name: user.full_name,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-    });
-
+    setSessionCookie({ id: user.id, full_name: user.full_name, username: user.username, email: user.email, role: user.role });
     return NextResponse.json({ user });
   } catch (err) {
-    console.error("Login error:", err);
+    console.error(err);
     return NextResponse.json({ error: "Authentication failed." }, { status: 500 });
   }
 }

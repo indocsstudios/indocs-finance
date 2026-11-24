@@ -1,9 +1,5 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 body { background-color: #f8fafc; color: #0f172a; }
-@media print {
-  .no-print { display: none !important; }
-  body { background: #ffffff !important; }
-}
+@media print { .no-print { display: none !important; } body { background: #ffffff !important; } }

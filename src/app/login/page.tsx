@@ -2,7 +2,8 @@
 
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Lock, Mail, User, ShieldCheck, CheckCircle2, AlertCircle } from "lucide-react";
+import { Lock, Mail, User, ShieldCheck, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { DEFAULT_LOGO_URL } from "@/lib/constants";
 
 function LoginContent() {
   const router = useRouter();
@@ -20,12 +21,10 @@ function LoginContent() {
   const [success, setSuccess] = useState("");
 
   async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setError(""); setSuccess(""); setLoading(true);
+    e.preventDefault(); setError(""); setSuccess(""); setLoading(true);
     try {
       const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier, password }),
       });
       const data = await res.json();
@@ -35,12 +34,10 @@ function LoginContent() {
   }
 
   async function handleRegister(e: React.FormEvent) {
-    e.preventDefault();
-    setError(""); setSuccess(""); setLoading(true);
+    e.preventDefault(); setError(""); setSuccess(""); setLoading(true);
     try {
       const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ full_name: fullName, username, email }),
       });
       const data = await res.json();
@@ -53,19 +50,18 @@ function LoginContent() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-950 via-zinc-900 to-teal-950 p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
         <div className="bg-[#111318] px-8 py-6 text-white border-b-4 border-teal-600">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-teal-600 flex items-center justify-center font-bold text-lg">IM</div>
+          <div className="flex items-center gap-3.5">
+            <img src={DEFAULT_LOGO_URL} alt="Indocs Media" className="h-11 w-11 object-contain rounded-lg bg-black/40 p-1" />
             <div>
               <h1 className="text-xl font-bold tracking-tight">INDOCS MEDIA</h1>
-              <p className="text-xs text-zinc-400">Projects, Receipts &amp; Finance Portal</p>
+              <p className="text-xs text-zinc-400">Shri Harivansh — Admin &amp; Finance Portal</p>
             </div>
           </div>
         </div>
         <div className="p-8">
           {verifiedStatus === "success" && (
             <div className="mb-4 flex items-start gap-2 rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-800">
-              <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />
-              <span>Email verified! Once an Admin approves your account, you can log in below.</span>
+              <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" /><span>Email verified! Wait for Admin approval to log in.</span>
             </div>
           )}
           {verifiedStatus === "invalid" && (
@@ -92,7 +88,7 @@ function LoginContent() {
                 <div className="relative">
                   <User className="h-4 w-4 text-slate-400 absolute left-3 top-3" />
                   <input type="text" required value={identifier} onChange={(e) => setIdentifier(e.target.value)}
-                    placeholder="mithilesh, anav, divansh or email"
+                    placeholder="mithilesh, devansh, anav or email"
                     className="w-full pl-9 pr-3 py-2.5 border border-slate-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-teal-600" />
                 </div>
               </div>
@@ -106,7 +102,8 @@ function LoginContent() {
                 </div>
               </div>
               <button type="submit" disabled={loading}
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2.5 rounded-lg text-sm transition disabled:opacity-60">
+                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2.5 rounded-lg text-sm flex items-center justify-center gap-2 disabled:opacity-60">
+                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 {loading ? "Signing in..." : "Sign In to Admin Panel"}
               </button>
               <p className="text-xs text-slate-500 flex items-center gap-1.5 pt-1">
@@ -118,7 +115,7 @@ function LoginContent() {
             <form onSubmit={handleRegister} className="space-y-4">
               <input type="text" required value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Full Name"
                 className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm" />
-              <input type="text" required value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username (e.g. anav)"
+              <input type="text" required value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username"
                 className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm" />
               <div className="relative">
                 <Mail className="h-4 w-4 text-slate-400 absolute left-3 top-3" />
@@ -126,7 +123,8 @@ function LoginContent() {
                   className="w-full pl-9 pr-3 py-2.5 border border-slate-300 rounded-lg text-sm" />
               </div>
               <button type="submit" disabled={loading}
-                className="w-full bg-[#111318] hover:bg-zinc-800 text-white font-semibold py-2.5 rounded-lg text-sm">
+                className="w-full bg-[#111318] hover:bg-zinc-800 text-white font-semibold py-2.5 rounded-lg text-sm flex items-center justify-center gap-2">
+                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 {loading ? "Sending..." : "Verify Email & Request Approval"}
               </button>
             </form>

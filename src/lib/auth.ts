@@ -6,9 +6,7 @@ const COOKIE_NAME = "indox_session";
 
 function getSecret(): string {
   const secret = process.env.SESSION_SECRET;
-  if (!secret || secret.length < 16) {
-    throw new Error("SESSION_SECRET must be set in .env (min 16 characters).");
-  }
+  if (!secret || secret.length < 16) throw new Error("SESSION_SECRET must be set in .env.");
   return secret;
 }
 
@@ -35,45 +33,28 @@ export function verifySessionToken(token: string | undefined): SessionUser | nul
     const expectedSig = crypto.createHmac("sha256", getSecret()).update(encoded).digest("base64url");
     const sigBuf = Buffer.from(sig, "utf8");
     const expectedBuf = Buffer.from(expectedSig, "utf8");
-    if (sigBuf.length !== expectedBuf.length) return null;
-    if (!crypto.timingSafeEqual(sigBuf, expectedBuf)) return null;
+    if (sigBuf.length !== expectedBuf.length || !crypto.timingSafeEqual(sigBuf, expectedBuf)) return null;
     const payload = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));
     if (!payload.exp || payload.exp < Math.floor(Date.now() / 1000)) return null;
     return {
-      id: payload.id,
-      full_name: payload.full_name,
-      username: payload.username,
-      email: payload.email,
-      role: payload.role,
+      id: payload.id, full_name: payload.full_name, username: payload.username, email: payload.email, role: payload.role,
     };
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
 export function getSession(): SessionUser | null {
-  const token = cookies().get(COOKIE_NAME)?.value;
-  return verifySessionToken(token);
+  return verifySessionToken(cookies().get(COOKIE_NAME)?.value);
 }
 
 export function setSessionCookie(user: SessionUser) {
-  const token = createSessionToken(user);
-  cookies().set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+  cookies().set(COOKIE_NAME, createSessionToken(user), {
+    httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 7,
   });
 }
 
 export function clearSessionCookie() {
   cookies().set(COOKIE_NAME, "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
+    httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 0,
   });
 }
 

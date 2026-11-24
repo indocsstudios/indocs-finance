@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { DEFAULT_LOGO_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Indocs Media — Projects, Receipts & Finance Portal",
-  description: "Client receipts, multi-event shoots, and internal profit/expense ledger for Indocs Media.",
+  description: "Quotations, Booking Confirmations, Final Receipts & Internal Finance Ledger for Indocs Media.",
+  icons: {
+    icon: DEFAULT_LOGO_URL,
+    shortcut: DEFAULT_LOGO_URL,
+    apple: DEFAULT_LOGO_URL,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
