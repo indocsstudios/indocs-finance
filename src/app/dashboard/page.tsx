@@ -3,7 +3,7 @@ import { getSession } from "@/lib/auth";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { DEFAULT_LOGO_URL } from "@/lib/constants";
 import DashboardClient from "@/components/DashboardClient";
-import type { CompanySettings, FinanceTransaction, Project, TeamMember, VendorBooking } from "@/lib/types";
+import type { CompanySettings, FinanceTransaction, Project, TeamMember } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -12,12 +12,11 @@ export default async function DashboardPage() {
   if (!user) redirect("/login");
 
   const supabase = getSupabaseAdmin();
-  const [projectsRes, settingsRes, membersRes, financeRes, vendorRes] = await Promise.all([
+  const [projectsRes, settingsRes, membersRes, financeRes] = await Promise.all([
     supabase.from("projects").select("*, project_events(*)").order("created_at", { ascending: false }),
     supabase.from("company_settings").select("*").eq("id", 1).single(),
     supabase.from("team_members").select("id, full_name, username, email, role, email_verified, is_approved, created_at").order("created_at", { ascending: false }),
     supabase.from("finance_transactions").select("*").order("tx_date", { ascending: false }).order("created_at", { ascending: false }),
-    supabase.from("vendor_bookings").select("*").order("created_at", { ascending: false }),
   ]);
 
   const projects: Project[] = (projectsRes.data || []).map((p) => ({
@@ -50,7 +49,6 @@ export default async function DashboardPage() {
       initialSettings={settings}
       initialMembers={(membersRes.data as TeamMember[]) || []}
       initialTransactions={(financeRes.data as FinanceTransaction[]) || []}
-      initialVendorBookings={(vendorRes.data as VendorBooking[]) || []}
     />
   );
 }

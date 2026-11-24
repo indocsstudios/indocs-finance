@@ -6,7 +6,7 @@ import {
   FileText, Plus, LogOut, Users, Settings, Wallet, Loader2,
   CheckCircle2, Clock, Search, Download, Edit3, Trash2, Shield, IndianRupee,
 } from "lucide-react";
-import type { CompanySettings, FinanceTransaction, Project, SessionUser, TeamMember, VendorBooking } from "@/lib/types";
+import type { CompanySettings, FinanceTransaction, Project, SessionUser, TeamMember } from "@/lib/types";
 import { DEFAULT_LOGO_URL } from "@/lib/constants";
 import { formatDate, formatINR, getProjectFinancials } from "@/lib/format";
 import { downloadReceiptPDF } from "@/lib/pdf";
@@ -20,17 +20,15 @@ interface Props {
   initialSettings: CompanySettings;
   initialMembers: TeamMember[];
   initialTransactions: FinanceTransaction[];
-  initialVendorBookings: VendorBooking[];
 }
 
 export default function DashboardClient({
-  user, initialProjects, initialSettings, initialMembers, initialTransactions, initialVendorBookings,
+  user, initialProjects, initialSettings, initialMembers, initialTransactions,
 }: Props) {
   const router = useRouter();
   const [tab, setTab] = useState<"projects" | "finance" | "team" | "settings">("projects");
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [transactions, setTransactions] = useState<FinanceTransaction[]>(initialTransactions);
-  const [vendorBookings, setVendorBookings] = useState<VendorBooking[]>(initialVendorBookings);
   const [settings, setSettings] = useState<CompanySettings>(initialSettings);
   const [members, setMembers] = useState<TeamMember[]>(initialMembers);
 
@@ -271,8 +269,6 @@ export default function DashboardClient({
             cashHolders={cashHolders}
             preselectedProjectId={preselectedFinanceProject}
             onClearPreselected={() => setPreselectedFinanceProject(null)}
-            vendorBookings={vendorBookings}
-            onVendorBookingsChange={setVendorBookings}
             onTransactionsChange={setTransactions}
           />
         )}

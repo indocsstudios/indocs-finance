@@ -77,23 +77,9 @@ export interface Project {
   project_events: ProjectEvent[];
 }
 
-export interface VendorBooking {
-  id: string;
-  project_id: string | null;
-  vendor_name: string;
-  role_service: string;
-  phone: string | null;
-  agreed_amount: number;
-  due_date: string | null;
-  notes: string | null;
-  created_by: string | null;
-  created_at: string;
-}
-
 export interface FinanceTransaction {
   id: string;
   project_id: string | null;
-  vendor_booking_id: string | null;
   tx_type: "expense" | "income" | "transfer";
   category: string;
   title: string;
