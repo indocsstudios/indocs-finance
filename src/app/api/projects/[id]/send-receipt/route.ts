@@ -28,7 +28,8 @@ export async function POST(req: Request, { params }: { params: { id: string } })
         : undefined,
     });
     return NextResponse.json({ message: `${stageName} emailed to ${recipient}!` });
-  } catch {
-    return NextResponse.json({ error: "Failed to send email." }, { status: 500 });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Unknown SMTP error";
+    return NextResponse.json({ error: `SMTP Error: ${msg}` }, { status: 500 });
   }
 }
