@@ -29,7 +29,10 @@ export async function POST(req: Request) {
       .eq(field, identifier)
       .maybeSingle();
 
-    if (error || !user) {
+    if (error) {
+      return NextResponse.json({ error: `Supabase Error: ${error.message}` }, { status: 500 });
+    }
+    if (!user) {
       return NextResponse.json(
         { error: "Account not found. Please register first or contact Admin." },
         { status: 401 }
