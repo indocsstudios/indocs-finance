@@ -99,8 +99,8 @@ export default function ProjectFormModal({ settings, cashHolders, initialProject
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+      <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-4xl max-h-[94vh] flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 bg-[#111318] text-white border-b-2 border-teal-600">
           <div>
             <h2 className="font-semibold text-base">
@@ -111,7 +111,7 @@ export default function ProjectFormModal({ settings, cashHolders, initialProject
           <button onClick={onClose} className="p-1.5 text-zinc-400 hover:text-white"><X className="h-5 w-5" /></button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 overflow-y-auto space-y-5">
           {error && <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700">{error}</div>}
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

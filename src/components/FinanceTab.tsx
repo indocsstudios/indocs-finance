@@ -351,7 +351,7 @@ export default function FinanceTab({
             Kitne paise aaye, kitna kharcha hua, paise kiske pass hain, aur cameraman/vendors ko kitna dena baaki hai — sab ek jagah.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-2 w-full sm:w-auto">
           <button onClick={() => openNewVendorModal()}
             className="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-500 text-white px-3.5 py-2.5 rounded-xl text-xs font-semibold">
             <UserCheck className="h-4 w-4" /> + Book Cameraman / Vendor
@@ -368,7 +368,7 @@ export default function FinanceTab({
       </div>
 
       {/* 5 Cashflow KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3.5">
         <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
           <div className="text-[11px] font-semibold text-slate-500 uppercase flex items-center gap-1"><TrendingUp className="h-3.5 w-3.5 text-emerald-600" /> Paise Aaye</div>
           <div className="text-xl font-extrabold text-emerald-700 mt-1">{formatINR(summary.totalInflow)}</div>
@@ -396,7 +396,7 @@ export default function FinanceTab({
         <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
           <Users className="h-4 w-4 text-teal-600" /> Paise Kiske Pass Hai? (Live Team Cash Custody)
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
           {custodyBalances.map((c) => (
             <div key={c.name} className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
               <div className="text-xs font-bold text-slate-700">{c.name}</div>
@@ -610,13 +610,13 @@ export default function FinanceTab({
 
       {/* Add / Edit Cameraman / Vendor Booking Modal */}
       {showVendorModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-lg max-h-[92vh] flex flex-col overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 bg-[#111318] text-white">
               <h3 className="font-semibold text-sm">{editingVendor ? "Edit Cameraman / Vendor Booking" : "Book Cameraman / Crew / Rental Vendor"}</h3>
               <button onClick={() => setShowVendorModal(false)} className="text-zinc-400 hover:text-white"><X className="h-5 w-5" /></button>
             </div>
-            <form onSubmit={handleSaveVendor} className="p-6 space-y-4">
+            <form onSubmit={handleSaveVendor} className="p-4 sm:p-6 space-y-4 overflow-y-auto">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">Project (optional)</label>
                 <select value={vProjectId} onChange={(e) => setVProjectId(e.target.value)}
@@ -702,13 +702,13 @@ export default function FinanceTab({
 
       {/* Add / Edit Finance Transaction Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-lg max-h-[92vh] flex flex-col overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 bg-[#111318] text-white">
               <h3 className="font-semibold text-sm">{editingTx ? "Edit Finance Entry" : vendorBookingId ? "Pay Cameraman / Vendor Installment" : "Add Expense / Income / Team Transfer"}</h3>
               <button onClick={() => { setShowModal(false); onClearPreselected?.(); }} className="text-zinc-400 hover:text-white"><X className="h-5 w-5" /></button>
             </div>
-            <form onSubmit={handleSaveTx} className="p-6 space-y-4">
+            <form onSubmit={handleSaveTx} className="p-4 sm:p-6 space-y-4 overflow-y-auto">
               {!vendorBookingId && (
                 <div className="flex rounded-lg bg-slate-100 p-1 text-xs font-bold">
                   <button type="button" onClick={() => { setTxType("expense"); setCategory(EXPENSE_CATEGORIES[0]); }}

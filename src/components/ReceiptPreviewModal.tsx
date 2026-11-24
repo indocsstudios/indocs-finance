@@ -65,8 +65,8 @@ export default function ReceiptPreviewModal({ project, settings, onClose }: Prop
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[94vh] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+      <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] flex flex-col overflow-hidden">
         {/* Toolbar + 3-Stage Switcher */}
         <div className="no-print flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 bg-[#111318] text-white border-b border-zinc-800">
           <div className="flex items-center gap-1.5 bg-zinc-900 p-1 rounded-lg">
@@ -106,7 +106,7 @@ export default function ReceiptPreviewModal({ project, settings, onClose }: Prop
 
         {/* Receipt Body */}
         <div className="overflow-y-auto bg-white text-slate-800">
-          <div className="bg-[#111318] text-white px-8 py-6 border-b-4 border-teal-600 flex flex-wrap justify-between items-start gap-4">
+          <div className="bg-[#111318] text-white px-4 sm:px-8 py-5 sm:py-6 border-b-4 border-teal-600 flex flex-wrap justify-between items-start gap-4">
             <div className="flex items-start gap-4">
               <img src={logoSrc} alt="Indocs Media Logo" className="h-14 w-14 object-contain rounded-lg" />
               <div>
@@ -130,7 +130,7 @@ export default function ReceiptPreviewModal({ project, settings, onClose }: Prop
             </div>
           </div>
 
-          <div className="p-8 space-y-6">
+          <div className="p-4 sm:p-8 space-y-5 sm:space-y-6">
             <div className={`border-l-4 px-5 py-4 flex flex-wrap items-center justify-between gap-4 ${
               stage === "Quotation" ? "bg-indigo-50 border-indigo-600" : "bg-emerald-50 border-teal-600"
             }`}>

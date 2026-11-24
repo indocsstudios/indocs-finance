@@ -1,5 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body { background-color: #f8fafc; color: #0f172a; }
-@media print { .no-print { display: none !important; } body { background: #ffffff !important; } }
+
+html, body {
+  background-color: #f8fafc;
+  color: #0f172a;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #ffffff !important; }
+}
